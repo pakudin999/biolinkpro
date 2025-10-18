@@ -1,5 +1,4 @@
 {
   "name": "Team Directory",
-  "description": "A static web application to display a team directory with contact information and links to social media groups. Built with React and Tailwind CSS for easy deployment on static hosting like GitHub Pages.",
-  "requestFramePermissions": []
+  "description": "A static web application to display a team directory with contact information and links to social media groups. Built with React and Tailwind CSS for easy deployment on static hosting like GitHub Pages."
 }
