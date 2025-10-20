@@ -218,9 +218,15 @@
         
         <!-- Web & Mobile Section -->
         <main id="webmobileSection" class="tab-panel bg-transparent p-0 border-none shadow-none hidden">
-            <!-- Swiper -->
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper" id="swiperWrapper">
+            <!-- Swiper 1 -->
+            <div class="swiper mySwiper1 mb-4">
+                <div class="swiper-wrapper" id="swiperWrapper1">
+                    <!-- Slides will be injected by JavaScript -->
+                </div>
+            </div>
+             <!-- Swiper 2 -->
+            <div class="swiper mySwiper2">
+                <div class="swiper-wrapper" id="swiperWrapper2">
                     <!-- Slides will be injected by JavaScript -->
                 </div>
             </div>
@@ -238,12 +244,20 @@
             { name: 'BILQIS', phone: '01111414273' }
         ];
 
-        const SLIDER_IMAGES = [
+        const SLIDER_IMAGES_ROW1 = [
             'https://i.imgur.com/6eeSRLT.jpeg',
             'https://i.imgur.com/5TrcDNr.jpeg',
             'https://i.imgur.com/I1LjYMI.jpeg',
             'https://i.imgur.com/vJOr7fn.jpeg',
             'https://i.imgur.com/faJCS7z.jpeg'
+        ];
+        
+        const SLIDER_IMAGES_ROW2 = [
+            'https://i.imgur.com/h90Y7zV.jpeg',
+            'https://i.imgur.com/zrg32jO.jpeg',
+            'https://i.imgur.com/sC5n7A2.jpeg',
+            'https://i.imgur.com/V2vj4II.jpeg',
+            'https://i.imgur.com/Vb87ff4.jpeg'
         ];
 
         const COLORS = [
@@ -297,29 +311,50 @@
             teamGrid.innerHTML = TEAM_MEMBERS.map(createMemberCard).join('');
         }
 
-        function renderSlider() {
-            const swiperWrapper = document.getElementById('swiperWrapper');
-            if (!swiperWrapper) return;
-            
-            swiperWrapper.innerHTML = SLIDER_IMAGES.map(src => `
+        function renderSliders() {
+            const swiperWrapper1 = document.getElementById('swiperWrapper1');
+            const swiperWrapper2 = document.getElementById('swiperWrapper2');
+
+            const createSlide = (src, alt) => `
                 <div class="swiper-slide">
                     <div class="w-full aspect-[1/1.414] bg-white/30 rounded-2xl overflow-hidden shadow-lg border border-white/20">
-                        <img src="${src}" class="w-full h-full object-cover" loading="lazy" alt="Koleksi RT">
+                        <img src="${src}" class="w-full h-full object-cover" loading="lazy" alt="${alt}">
                     </div>
                 </div>
-            `).join('');
+            `;
+
+            if (swiperWrapper1) {
+                swiperWrapper1.innerHTML = SLIDER_IMAGES_ROW1.map(src => createSlide(src, "Koleksi RT")).join('');
+            }
+            if (swiperWrapper2) {
+                swiperWrapper2.innerHTML = SLIDER_IMAGES_ROW2.map(src => createSlide(src, "Koleksi Rantai")).join('');
+            }
         }
 
-        function initSwiper() {
-            new Swiper(".mySwiper", {
+        function initSwipers() {
+            new Swiper(".mySwiper1", {
                 slidesPerView: 2,
                 spaceBetween: 16,
                 loop: true,
                 centeredSlides: true,
-                speed: 600, // Faster transition
+                speed: 600,
                 autoplay: {
-                    delay: 2000, // Shorter delay
+                    delay: 2000,
                     disableOnInteraction: false,
+                },
+                slidesPerGroup: 1,
+                allowTouchMove: true,
+            });
+            new Swiper(".mySwiper2", {
+                slidesPerView: 2,
+                spaceBetween: 16,
+                loop: true,
+                centeredSlides: true,
+                speed: 600,
+                autoplay: {
+                    delay: 2000,
+                    disableOnInteraction: false,
+                    reverseDirection: true,
                 },
                 slidesPerGroup: 1,
                 allowTouchMove: true,
@@ -462,8 +497,8 @@
         function init() {
             renderAllMembers();
             setupScrollAnimation();
-            renderSlider();
-            initSwiper();
+            renderSliders();
+            initSwipers();
             document.addEventListener('keydown', (e) => {
                 if(e.key === 'Escape') {
                     closePopup();
