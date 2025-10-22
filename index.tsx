@@ -55,15 +55,66 @@ const COLORS = [
 ];
 
 // --- Error Handling ---
+function showGlobalError(title, detailsHtml) {
+    const banner = document.getElementById('globalErrorBanner');
+    const titleEl = document.getElementById('globalErrorTitle');
+    const messageEl = document.getElementById('globalErrorMessage');
+    const closeBtn = document.getElementById('closeErrorBanner');
+
+    if (!banner || !titleEl || !messageEl || !closeBtn) return;
+
+    titleEl.textContent = title;
+    messageEl.innerHTML = detailsHtml;
+    banner.classList.remove('hidden');
+
+    closeBtn.onclick = () => {
+        banner.classList.add('hidden');
+    };
+}
+
 function handleFirestoreError(error, action) {
     console.error(`Error ${action}:`, error);
-    let message = `Failed to ${action}. Please check your internet connection.`;
-    if (error.code === 'permission-denied') {
-        message = `Permission Denied. The database security rules are blocking this action. This is common when deploying to a new URL like GitHub Pages. Please check your Firestore Rules in the Firebase Console.`;
-    } else if (error.code === 'unauthenticated') {
-        message = `Authentication Error. The database requires you to be logged in. Please check your Firestore Rules.`;
+
+    let title = `Failed to ${action}`;
+    let detailsHtml = `An unexpected error occurred. Please check your internet connection and try again.`;
+
+    if (error.code === 'permission-denied' || error.code === 'unauthenticated') {
+        title = "Permission Error with Database";
+        detailsHtml = `
+            <p class="mb-2">The app couldn't access the data, which is a common issue after deploying to a new website like GitHub Pages.</p>
+            <p class="font-semibold">Here's how to fix it in your Firebase Console:</p>
+            <ol class="list-decimal list-inside mt-2 space-y-1">
+                <li><strong>Authorize Domain:</strong> Go to <strong>Authentication > Settings > Authorized domains</strong> and add your GitHub Pages URL (e.g., <strong>${window.location.hostname}</strong>).</li>
+                <li><strong>Check Firestore Rules:</strong> Go to <strong>Firestore Database > Rules</strong>. For a public directory, you need to allow anyone to read the data. A safe rule could be:
+                    <pre class="bg-red-50 text-xs p-2 rounded mt-1 font-mono"><code>service cloud.firestore {
+  match /databases/{database}/documents {
+    match /teamMembers/{docId} {
+      allow read: if true;
+      allow write: if false; // Protects data
     }
-    alert(message);
+  }
+}</code></pre>
+                </li>
+            </ol>
+        `;
+    }
+
+    showGlobalError(title, detailsHtml);
+
+    const teamGrid = document.getElementById('teamGrid');
+    if (teamGrid) {
+        teamGrid.innerHTML = `
+            <div class="col-span-full text-center py-10 bg-red-100/50 rounded-lg border border-red-200">
+                <h3 class="font-semibold text-red-700">Failed to Load Team Members</h3>
+                <p class="text-red-600 text-sm mt-1">See the error banner at the top for details on how to fix this.</p>
+            </div>
+        `;
+    }
+     const adminList = document.getElementById('adminTeamList');
+     const adminSection = document.getElementById('adminSection');
+    if (adminList && adminSection && !adminSection.classList.contains('hidden')) {
+         adminList.innerHTML = `<p class="text-center text-red-600 p-4 bg-red-100/50 rounded-lg">Failed to load data. See the error banner at the top for help.</p>`;
+    }
 }
 
 
@@ -440,7 +491,8 @@ function showMemberForm(id = null) {
         : { name: '', phone: '', role: '', image: '' };
 
     if (isEditing && !member) {
-        alert('Could not find the member to edit.');
+        // Using the new error system instead of alert
+        showGlobalError('Error', 'Could not find the member to edit. Please refresh and try again.');
         return;
     }
 
@@ -552,41 +604,32 @@ function setupEventListeners() {
 
 // --- App Initialization ---
 async function init() {
-    // 1. Initialize the animation observer system.
-    initScrollObserver();
-
-    // 2. Render initial UI content (skeletons, static sliders).
-    renderSkeletonLoader();
-    renderSliders();
-
-    // 3. Initialize interactive components and event listeners.
-    initSwipers();
-    setupEventListeners();
-    switchTab('home');
-    
-    // 4. Observe all initial elements on the page.
-    observeElements(document.body);
-
-    // 5. Start listening for real-time data from Firestore.
-    listenForTeamChanges();
-
-    // 6. Check if the database is empty and needs to be seeded with default data.
     try {
+        // 1. Initialize the animation observer system.
+        initScrollObserver();
+
+        // 2. Render initial UI content (skeletons, static sliders).
+        renderSkeletonLoader();
+        renderSliders();
+
+        // 3. Initialize interactive components and event listeners.
+        initSwipers();
+        setupEventListeners();
+        switchTab('home');
+        
+        // 4. Observe all initial elements on the page.
+        observeElements(document.body);
+
+        // 5. Start listening for real-time data from Firestore.
+        listenForTeamChanges();
+
+        // 6. Check if the database is empty and needs to be seeded with default data.
         const snapshot = await getDocs(teamCollection);
         if (snapshot.empty) {
             await seedInitialData();
         }
     } catch (e) {
-        handleFirestoreError(e, "check for initial data");
-        const teamGrid = document.getElementById('teamGrid');
-        if (teamGrid) {
-            teamGrid.innerHTML = `
-                <div class="col-span-full text-center py-10 bg-red-100/50 rounded-lg border border-red-200">
-                    <h3 class="font-semibold text-red-700">Failed to Connect to Database</h3>
-                    <p class="text-red-600 text-sm mt-1">The team list could not be loaded. Please check your connection or Firebase configuration.</p>
-                </div>
-            `;
-        }
+        handleFirestoreError(e, "initialize the application");
     }
 }
 
