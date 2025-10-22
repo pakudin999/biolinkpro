@@ -36,6 +36,7 @@ const DEFAULT_TEAM_MEMBERS = [
 ];
 
 let teamMembers = [];
+let scrollObserver: IntersectionObserver | null = null;
 
 const SLIDER_IMAGES_ROW1 = [
     'https://i.imgur.com/6eeSRLT.jpeg', 'https://i.imgur.com/5TrcDNr.jpeg', 'https://i.imgur.com/I1LjYMI.jpeg',
@@ -82,8 +83,10 @@ function listenForTeamChanges() {
         teamMembers = snapshot.docs
             .map(doc => ({ id: doc.id, ...doc.data() }))
             .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-        renderAllMembers();
+        
+        const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+        renderAllMembers(searchInput.value);
+        
         const adminSection = document.getElementById('adminSection');
         if (adminSection && !adminSection.classList.contains('hidden')) {
             renderAdminList();
@@ -117,7 +120,7 @@ function createMemberCard(member) {
                 <div class="flex-1 min-w-0">
                     <div class="flex items-center space-x-1">
                         <h3 class="text-xs font-semibold text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">${member.name}</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm3.123 5.467a.75.75 0 00-1.06 1.06l1.25 1.25a.75.75 0 001.06 0l2.5-2.5a.75.75 0 00-1.06-1.06L9.39 9.22l-.722-.722z" clip-rule="evenodd" /></svg>
+                        <svg class="w-4 h-4 text-blue-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                     </div>
                     <p class="text-xs text-gray-500">${member.role}</p>
                 </div>
@@ -131,19 +134,55 @@ function createMemberCard(member) {
     `;
 }
 
-function renderAllMembers() {
+function renderAllMembers(searchTerm = '') {
     const teamGrid = document.getElementById('teamGrid');
-    if (teamGrid) {
-        teamGrid.innerHTML = teamMembers.map(createMemberCard).join('');
+    if (!teamGrid) return;
+
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const filteredMembers = teamMembers.filter(member =>
+        (member.name?.toLowerCase() || '').includes(lowerCaseSearchTerm) ||
+        (member.role?.toLowerCase() || '').includes(lowerCaseSearchTerm)
+    );
+
+    if (filteredMembers.length > 0) {
+        teamGrid.innerHTML = filteredMembers.map(createMemberCard).join('');
+        observeElements(teamGrid); // Observe newly rendered member cards
+    } else {
+        teamGrid.innerHTML = `
+            <div class="col-span-full text-center py-10">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <h3 class="mt-2 text-sm font-semibold text-gray-900">No members found</h3>
+                <p class="mt-1 text-sm text-gray-500">
+                    ${searchTerm ? "Try adjusting your search." : "No team members have been added yet."}
+                </p>
+            </div>
+        `;
     }
 }
+
 
 function renderAdminList() {
     const adminList = document.getElementById('adminTeamList');
     if (!adminList) return;
 
     if (teamMembers.length === 0) {
-        adminList.innerHTML = `<p class="text-center text-gray-500 py-4">No team members found. Click 'Add Member' to start.</p>`;
+        adminList.innerHTML = `
+            <div class="text-center py-10 px-4 bg-white/30 backdrop-blur-sm rounded-2xl border border-white/40">
+                <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.962A3.75 3.75 0 0115 9.75v6.038m-3.75-6.808A3.75 3.75 0 019 9.75v6.038m-3.75-6.808A3.75 3.75 0 013 9.75v6.038m12-6.808v-3a3 3 0 00-3-3H9a3 3 0 00-3 3v3m15 9.75a3 3 0 01-3 3H6a3 3 0 01-3-3v-3a3 3 0 013-3h12a3 3 0 013 3v3z" />
+                </svg>
+                <h3 class="mt-2 text-lg font-semibold text-gray-800">Your Team is Empty</h3>
+                <p class="mt-1 text-sm text-gray-600">Get started by adding your first team member.</p>
+                <button data-action="add-first-member" class="mt-6 inline-flex items-center rounded-md bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-600 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600">
+                    <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                    </svg>
+                    Add First Member
+                </button>
+            </div>
+        `;
         return;
     }
 
@@ -177,6 +216,26 @@ function renderAdminList() {
         `;
     }).join('');
 }
+
+function renderSkeletonLoader() {
+    const teamGrid = document.getElementById('teamGrid');
+    if (!teamGrid) return;
+    const skeletonCard = `
+        <div class="bg-white/25 backdrop-blur-lg rounded-2xl p-4 shadow-xl border border-white/30 skeleton-pulse scroll-fade-in">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-gray-300/50"></div>
+                <div class="flex-1 min-w-0 space-y-2">
+                    <div class="h-3 bg-gray-300/50 rounded"></div>
+                    <div class="h-2 bg-gray-300/50 rounded w-3/4"></div>
+                </div>
+            </div>
+            <div class="w-full h-8 bg-gray-300/50 rounded-xl"></div>
+        </div>
+    `;
+    teamGrid.innerHTML = Array(6).fill(skeletonCard).join('');
+    observeElements(teamGrid); // Observe skeleton loaders
+}
+
 
 function renderSliders() {
     const swiperWrapper1 = document.getElementById('swiperWrapper1');
@@ -318,19 +377,28 @@ function switchTab(selectedTab) {
     }
 }
 
-function setupScrollAnimation() {
-    const animatedElements = document.querySelectorAll('.scroll-fade-in');
+function initScrollObserver() {
     if (!('IntersectionObserver' in window)) {
-        animatedElements.forEach(el => el.classList.add('is-visible'));
+        document.body.classList.add('no-observer');
         return;
     }
-    const observer = new IntersectionObserver((entries) => {
+    
+    scrollObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('is-visible');
-            else entry.target.classList.remove('is-visible');
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target); // Animate only once for performance
+            }
         });
     }, { threshold: 0.1 });
-    animatedElements.forEach(el => observer.observe(el));
+}
+
+function observeElements(container: HTMLElement) {
+    if (!scrollObserver) return;
+    const elementsToObserve = container.querySelectorAll('.scroll-fade-in');
+    elementsToObserve.forEach(el => {
+        scrollObserver.observe(el);
+    });
 }
 
 // --- Admin CRUD Functions (Firestore Version) ---
@@ -435,6 +503,11 @@ function setupEventListeners() {
     document.getElementById('mediaTab').addEventListener('click', () => switchTab('media'));
     document.getElementById('addMemberBtn').addEventListener('click', () => showMemberForm());
 
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    searchInput.addEventListener('input', (e) => {
+        renderAllMembers((e.target as HTMLInputElement).value);
+    });
+
     document.getElementById('teamGrid').addEventListener('click', (event) => {
         const button = (event.target as HTMLElement).closest('button[data-action="contact"]');
         if (!button) return;
@@ -450,6 +523,8 @@ function setupEventListeners() {
             showMemberForm(id);
         } else if (action === 'delete') {
             deleteMember(id);
+        } else if (action === 'add-first-member') {
+            showMemberForm();
         }
     });
 
@@ -477,17 +552,42 @@ function setupEventListeners() {
 
 // --- App Initialization ---
 async function init() {
-    const snapshot = await getDocs(teamCollection);
-    if (snapshot.empty) {
-        await seedInitialData();
-    }
-    
-    listenForTeamChanges();
-    setupScrollAnimation();
+    // 1. Initialize the animation observer system.
+    initScrollObserver();
+
+    // 2. Render initial UI content (skeletons, static sliders).
+    renderSkeletonLoader();
     renderSliders();
+
+    // 3. Initialize interactive components and event listeners.
     initSwipers();
     setupEventListeners();
     switchTab('home');
+    
+    // 4. Observe all initial elements on the page.
+    observeElements(document.body);
+
+    // 5. Start listening for real-time data from Firestore.
+    listenForTeamChanges();
+
+    // 6. Check if the database is empty and needs to be seeded with default data.
+    try {
+        const snapshot = await getDocs(teamCollection);
+        if (snapshot.empty) {
+            await seedInitialData();
+        }
+    } catch (e) {
+        handleFirestoreError(e, "check for initial data");
+        const teamGrid = document.getElementById('teamGrid');
+        if (teamGrid) {
+            teamGrid.innerHTML = `
+                <div class="col-span-full text-center py-10 bg-red-100/50 rounded-lg border border-red-200">
+                    <h3 class="font-semibold text-red-700">Failed to Connect to Database</h3>
+                    <p class="text-red-600 text-sm mt-1">The team list could not be loaded. Please check your connection or Firebase configuration.</p>
+                </div>
+            `;
+        }
+    }
 }
 
 init();

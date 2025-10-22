@@ -66,6 +66,12 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Fallback for browsers without IntersectionObserver support */
+        .no-observer .scroll-fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
         
         /* Swiper styles */
         .swiper {
@@ -81,6 +87,17 @@
             justify-content: center;
             align-items: center;
         }
+
+        /* Skeleton loader animation */
+        @keyframes pulse {
+            50% {
+                opacity: .5;
+            }
+        }
+        .skeleton-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 relative">
@@ -108,7 +125,7 @@
     
     <div id="mainContentContainer" class="container mx-auto px-4 pt-8 pb-8 max-w-4xl relative z-10">
         <!-- Header -->
-        <header id="pageHeader" class="text-center mb-8 bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-xl">
+        <header id="pageHeader" class="text-center mb-8 bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-xl scroll-fade-in">
             <div class="w-full aspect-video bg-white/30 backdrop-blur-sm rounded-xl mb-6 overflow-hidden shadow-lg border border-white/20">
                 <img 
                     src="https://i.imgur.com/3tq8TU6.jpeg" 
@@ -126,7 +143,7 @@
         </header>
 
         <!-- Navigation Tabs -->
-        <div id="mainTabsContainer" class="mb-6 bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30 shadow-xl">
+        <div id="mainTabsContainer" class="mb-6 bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30 shadow-xl scroll-fade-in">
             <div class="flex space-x-2">
                 <button 
                     id="homeTab"
@@ -145,15 +162,25 @@
 
         <!-- Home Section -->
         <main id="homeSection" class="tab-panel bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-xl">
+            <!-- Search Bar -->
+            <div class="mb-6 relative scroll-fade-in">
+                <input type="text" id="searchInput" placeholder="Search for a team member..." class="w-full pl-10 pr-4 py-3 bg-white/40 backdrop-blur-sm border border-white/50 rounded-xl search-focus focus:ring-2 focus:ring-amber-400 focus:outline-none transition-all duration-300 text-sm text-gray-800 placeholder-gray-500">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                </div>
+            </div>
+
             <div id="teamGrid" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Team members will be populated by JavaScript -->
+                <!-- Team members or Skeleton loaders will be populated by JavaScript -->
             </div>
         </main>
 
         <!-- Media Social Section -->
         <main id="mediaSection" class="tab-panel bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-xl hidden">
             <div class="text-center py-6">
-                 <h3 class="text-lg font-semibold text-gray-700 mb-6">Follow Us On Social Media</h3>
+                 <h3 class="text-lg font-semibold text-gray-700 mb-6 scroll-fade-in">Follow Us On Social Media</h3>
                  <div class="grid grid-cols-2 gap-4">
 
                     <!-- Telegram Card -->
