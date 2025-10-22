@@ -53,6 +53,19 @@ const COLORS = [
     'bg-rose-200 text-rose-700'
 ];
 
+// --- Error Handling ---
+function handleFirestoreError(error, action) {
+    console.error(`Error ${action}:`, error);
+    let message = `Failed to ${action}. Please check your internet connection.`;
+    if (error.code === 'permission-denied') {
+        message = `Permission Denied. The database security rules are blocking this action. This is common when deploying to a new URL like GitHub Pages. Please check your Firestore Rules in the Firebase Console.`;
+    } else if (error.code === 'unauthenticated') {
+        message = `Authentication Error. The database requires you to be logged in. Please check your Firestore Rules.`;
+    }
+    alert(message);
+}
+
+
 // --- Data Persistence (Firestore) ---
 async function seedInitialData() {
     console.log("Database is empty. Seeding with default team members...");
@@ -76,8 +89,7 @@ function listenForTeamChanges() {
             renderAdminList();
         }
     }, (error) => {
-        console.error("Error listening to team changes:", error);
-        alert("Could not connect to the database. Please check your internet connection and Firebase setup.");
+        handleFirestoreError(error, "connect to the database");
     });
 }
 
@@ -326,8 +338,7 @@ async function addMember(memberData) {
     try {
         await addDoc(teamCollection, memberData);
     } catch (e) {
-        console.error("Error adding document: ", e);
-        alert('Failed to add member.');
+        handleFirestoreError(e, 'add member');
     }
 }
 
@@ -336,8 +347,7 @@ async function updateMember(id, memberData) {
         const memberRef = doc(db, "teamMembers", id);
         await updateDoc(memberRef, memberData);
     } catch (e) {
-        console.error("Error updating document: ", e);
-        alert('Failed to update member.');
+        handleFirestoreError(e, 'update member');
     }
 }
 
@@ -349,8 +359,7 @@ async function deleteMember(id) {
         try {
             await deleteDoc(doc(db, "teamMembers", id));
         } catch (e) {
-            console.error("Error deleting document: ", e);
-            alert('Failed to delete member.');
+            handleFirestoreError(e, 'delete member');
         }
     }
 }
