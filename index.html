@@ -38,14 +38,14 @@
             box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
         }
 
-        .tab-panel {
+        .tab-panel, .admin-panel {
             transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out, padding 0.3s ease-in-out, margin 0.3s ease-in-out, border-width 0.3s ease-in-out;
-            max-height: 2000px; /* Large enough value */
+            max-height: 4000px; /* Large enough value */
             opacity: 1;
             overflow: hidden;
         }
 
-        .tab-panel.hidden {
+        .tab-panel.hidden, .admin-panel.hidden {
             opacity: 0;
             max-height: 0;
             padding-top: 0;
@@ -159,18 +159,19 @@
         <header id="pageHeader" class="text-center mb-8 bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-xl">
             <div class="w-full aspect-video bg-white/30 backdrop-blur-sm rounded-xl mb-6 overflow-hidden shadow-lg border border-white/20">
                 <img 
+                    id="headerBannerImg"
                     src="https://i.imgur.com/3tq8TU6.jpeg" 
                     alt="Channel Banner"
                     class="w-full h-full object-cover"
                 />
             </div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center space-x-2">
-                <span>@kemchannelpg</span>
+            <h1 id="headerTitleContainer" class="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center space-x-2">
+                <span id="headerTitleText">@kemchannelpg</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm3.123 5.467a.75.75 0 00-1.06 1.06l1.25 1.25a.75.75 0 001.06 0l2.5-2.5a.75.75 0 00-1.06-1.06L9.39 9.22l-.722-.722z" clip-rule="evenodd" />
                 </svg>
             </h1>
-            <p class="text-gray-600">Your direct line to our expert team.</p>
+            <p id="headerSubtitleText" class="text-gray-600">Your direct line to our expert team.</p>
         </header>
 
         <!-- Navigation Tabs -->
@@ -209,31 +210,87 @@
         
         <!-- Web & Mobile Section -->
         <main id="webmobileSection" class="tab-panel bg-transparent p-0 border-none shadow-none hidden">
-            <!-- Swiper 1 -->
-            <div class="swiper mySwiper1 mb-4">
-                <div class="swiper-wrapper" id="swiperWrapper1">
-                    <!-- Slides will be injected by JavaScript -->
-                </div>
-            </div>
-             <!-- Swiper 2 -->
-            <div class="swiper mySwiper2">
-                <div class="swiper-wrapper" id="swiperWrapper2">
-                    <!-- Slides will be injected by JavaScript -->
-                </div>
+             <div id="dynamicSwiperContainer" class="space-y-4">
+                <!-- Dynamic sliders will be injected here -->
             </div>
         </main>
         
         <!-- Admin Section -->
         <main id="adminSection" class="tab-panel bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-xl hidden">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-gray-800">Admin Panel</h2>
-                <button onclick="showMemberForm()" class="flex items-center space-x-2 bg-amber-400 text-amber-900 font-medium py-2 px-4 rounded-xl shadow-lg hover:bg-amber-500 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110 2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
-                    <span>Add Member</span>
-                </button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Admin Panel</h2>
+            <!-- Admin Tabs -->
+            <div class="mb-6 border-b border-gray-300/50">
+                <nav class="flex space-x-1 sm:space-x-4" aria-label="Tabs" role="tablist">
+                    <button id="adminTabTeam" onclick="switchAdminTab('team')" role="tab" aria-selected="true" class="px-3 py-2 font-medium text-xs sm:text-sm rounded-t-lg border-b-2 border-amber-500 text-amber-600">
+                        Ahli Pasukan
+                    </button>
+                    <button id="adminTabSocial" onclick="switchAdminTab('social')" role="tab" aria-selected="false" class="px-3 py-2 font-medium text-xs sm:text-sm rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        Pautan Sosial
+                    </button>
+                    <button id="adminTabWebmobile" onclick="switchAdminTab('webmobile')" role="tab" aria-selected="false" class="px-3 py-2 font-medium text-xs sm:text-sm rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        Web & Mobile
+                    </button>
+                    <button id="adminTabSettings" onclick="switchAdminTab('settings')" role="tab" aria-selected="false" class="px-3 py-2 font-medium text-xs sm:text-sm rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        Tetapan Laman
+                    </button>
+                </nav>
             </div>
-            <div id="adminTeamList" class="space-y-3">
-                <!-- Admin list will be populated by JavaScript -->
+
+            <!-- Admin Panels -->
+            <div id="adminTeamPanel" class="admin-panel" role="tabpanel">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-800">Urus Ahli Pasukan</h3>
+                    <button onclick="showMemberForm()" class="flex items-center space-x-2 bg-amber-400 text-amber-900 font-medium py-2 px-4 rounded-xl shadow-lg hover:bg-amber-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110 2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                        <span>Tambah Ahli</span>
+                    </button>
+                </div>
+                <div id="adminTeamList" class="space-y-3"></div>
+            </div>
+
+            <div id="adminSocialPanel" class="admin-panel hidden" role="tabpanel">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-800">Urus Pautan Sosial</h3>
+                    <button onclick="showSocialLinkForm()" class="flex items-center space-x-2 bg-blue-500 text-white font-medium py-2 px-4 rounded-xl shadow-lg hover:bg-blue-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110 2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                        <span>Tambah Pautan</span>
+                    </button>
+                </div>
+                <div id="adminSocialList" class="space-y-3"></div>
+            </div>
+            
+            <div id="adminWebmobilePanel" class="admin-panel hidden" role="tabpanel">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-800">Urus Slider Web & Mobile</h3>
+                    <button onclick="showSliderForm()" class="flex items-center space-x-2 bg-purple-500 text-white font-medium py-2 px-4 rounded-xl shadow-lg hover:bg-purple-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110 2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                        <span>Tambah Slider</span>
+                    </button>
+                </div>
+                <div id="adminSliderList" class="space-y-3"></div>
+            </div>
+
+            <div id="adminSettingsPanel" class="admin-panel hidden" role="tabpanel">
+                 <h3 class="text-xl font-bold text-gray-800 mb-6">Tetapan Laman Utama</h3>
+                 <form id="siteSettingsForm" class="space-y-4 bg-white/50 backdrop-blur-lg rounded-xl p-4 shadow-md border border-white/30">
+                    <div>
+                        <label for="bannerUrl" class="text-sm font-medium text-gray-700 block mb-1">URL Banner Utama</label>
+                        <input type="url" id="bannerUrl" name="bannerImageUrl" placeholder="https://example.com/banner.jpg" class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition">
+                    </div>
+                     <div>
+                        <label for="headerTitle" class="text-sm font-medium text-gray-700 block mb-1">Tajuk Utama</label>
+                        <input type="text" id="headerTitle" name="headerTitle" class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition">
+                    </div>
+                    <div>
+                        <label for="headerSubtitle" class="text-sm font-medium text-gray-700 block mb-1">Subtajuk</label>
+                        <input type="text" id="headerSubtitle" name="headerSubtitle" class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition">
+                    </div>
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" class="px-6 py-3 bg-green-500 font-medium text-white rounded-xl hover:bg-green-600 transition-colors shadow-lg shadow-green-500/30">
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                 </form>
             </div>
         </main>
     </div>
@@ -264,7 +321,7 @@
             app = firebase.initializeApp(firebaseConfig);
             auth = firebase.auth();
             db = firebase.firestore();
-            auth.onAuthStateChanged(updateAuthUI); // Add Auth State Listener
+            auth.onAuthStateChanged(updateAuthUI);
         } catch (e) {
             console.error('Firebase initialization failed.', e);
             document.addEventListener('DOMContentLoaded', () => {
@@ -277,29 +334,18 @@
 
         let teamMembers = [];
         let socialLinks = [];
+        let siteConfig = {};
+        let webmobileSliders = [];
 
-        const DEFAULT_TEAM_MEMBERS = [
-            { id: 'default1', name: 'Ahmad Albab', role: 'Ketua Bahagian', phone: '0123456789', image: 'https://i.pravatar.cc/150?u=ahmad' },
-            { id: 'default2', name: 'Siti Saleha', role: 'Penolong Ketua', phone: '0198765432', image: 'https://i.pravatar.cc/150?u=siti' },
-            { id: 'default3', name: 'Raju A/L Muthu', role: 'Setiausaha', phone: '01122334455', image: 'https://i.pravatar.cc/150?u=raju' },
-            { id: 'default4', name: 'Mei Ling', role: 'Bendahari', phone: '0167788990', image: 'https://i.pravatar.cc/150?u=mei' },
-            { id: 'default5', name: 'John Doe', role: 'Ahli Jawatankuasa', phone: '0134567890', image: null },
-            { id: 'default6', name: 'Jane Smith', role: 'Ahli Jawatankuasa', phone: '0145678901', image: 'https://i.pravatar.cc/150?u=jane' },
-        ];
-
-        const DEFAULT_SOCIAL_LINKS = [
-            { id: 'default_tg', name: 'Telegram Group', handle: '@channelgroup', url: '#', icon: 'telegram' },
-            { id: 'default_fb', name: 'Facebook Page', handle: 'Channel Page', url: '#', icon: 'facebook' },
-            { id: 'default_ig', name: 'Instagram', handle: '@channel_ig', url: '#', icon: 'instagram' },
-            { id: 'default_tt', name: 'TikTok', handle: '@channeltiktok', url: '#', icon: 'tiktok' },
-        ];
-
-        const SLIDER_IMAGES_ROW1 = [ 'https://i.imgur.com/6eeSRLT.jpeg', 'https://i.imgur.com/5TrcDNr.jpeg', 'https://i.imgur.com/I1LjYMI.jpeg', 'https://i.imgur.com/vJOr7fn.jpeg', 'https://i.imgur.com/faJCS7z.jpeg' ];
-        const SLIDER_IMAGES_ROW2 = [ 'https://i.imgur.com/fuhTQ74.jpeg', 'https://i.imgur.com/ckGimJl.jpeg', 'https://i.imgur.com/36zJKGo.jpeg', 'https://i.imgur.com/ZCegcGC.jpeg', 'https://i.imgur.com/fLG14ZC.jpeg' ];
-
+        const DEFAULT_SITE_CONFIG = {
+            bannerImageUrl: 'https://i.imgur.com/3tq8TU6.jpeg',
+            headerTitle: '@kemchannelpg',
+            headerSubtitle: 'Your direct line to our expert team.'
+        };
+        
         const COLORS = [ 'bg-red-200 text-red-700', 'bg-orange-200 text-orange-700', 'bg-amber-200 text-amber-700', 'bg-yellow-200 text-yellow-700', 'bg-lime-200 text-lime-700', 'bg-green-200 text-green-700', 'bg-emerald-200 text-emerald-700', 'bg-teal-200 text-teal-700', 'bg-cyan-200 text-cyan-700', 'bg-sky-200 text-sky-700', 'bg-blue-200 text-blue-700', 'bg-indigo-200 text-indigo-700', 'bg-violet-200 text-violet-700', 'bg-purple-200 text-purple-700', 'bg-fuchsia-200 text-fuchsia-700', 'bg-pink-200 text-pink-700', 'bg-rose-200 text-rose-700' ];
         
-        // --- UI Feedback ---
+        // --- UI Feedback & Error Handling ---
         function showToast(message, type = 'success') {
             document.querySelectorAll('.toast').forEach(t => t.remove());
             const toast = document.createElement('div');
@@ -313,107 +359,88 @@
             }, 3000);
         }
 
-        // --- Error Handling ---
         function showGlobalError(message) {
-            const banner = document.getElementById('globalErrorBanner');
-            const messageEl = document.getElementById('globalErrorMessage');
-            if (banner && messageEl) {
-                messageEl.innerHTML = message;
-                banner.classList.remove('hidden');
-            }
+            document.getElementById('globalErrorMessage').innerHTML = message;
+            document.getElementById('globalErrorBanner').classList.remove('hidden');
         }
 
         function hideGlobalError() {
-            const banner = document.getElementById('globalErrorBanner');
-            if (banner) {
-                banner.classList.add('hidden');
-            }
+            document.getElementById('globalErrorBanner').classList.add('hidden');
         }
 
-        function handleFirestoreError(error) {
-            console.error("Ralat Firestore:", error.code, error.message);
-            const teamGrid = document.getElementById('teamGrid');
-            
-            let userMessage = '';
+        function handleFirestoreError(error, context) {
+            console.error(`Ralat Firestore [${context}]:`, error.code, error.message);
             const contentErrorMessage = `<p class="col-span-full text-center text-red-600 font-semibold p-4 bg-red-100/50 rounded-lg">Gagal memuatkan data. Sila rujuk amaran di atas untuk butiran lanjut.</p>`;
-
+            let userMessage = '';
             switch (error.code) {
-                case 'unavailable':
-                    userMessage = `<strong>Sambungan Gagal:</strong> Tidak dapat berhubung dengan pangkalan data. Sila semak sambungan internet anda.`;
-                    break;
-                case 'permission-denied':
-                    userMessage = `<strong>AKSES DIHALANG:</strong> Peraturan keselamatan pangkalan data menghalang akses. Pergi ke Projek Firebase &rarr; Firestore Database &rarr; Tab 'Rules', dan pastikan bacaan awam dibenarkan: <code>allow read: if true;</code>`;
-                    break;
-                default:
-                    userMessage = `Ralat tidak dijangka telah berlaku. (Kod Ralat: ${error.code})`;
+                case 'unavailable': userMessage = `<strong>Sambungan Gagal:</strong> Tidak dapat berhubung dengan pangkalan data. Sila semak sambungan internet anda.`; break;
+                case 'permission-denied': userMessage = `<strong>AKSES DIHALANG:</strong> Peraturan keselamatan pangkalan data menghalang akses. Pergi ke Projek Firebase &rarr; Firestore Database &rarr; Tab 'Rules', dan pastikan bacaan awam dibenarkan: <code>allow read: if true;</code>`; break;
+                default: userMessage = `Ralat tidak dijangka telah berlaku semasa memuatkan ${context}. (Kod Ralat: ${error.code})`;
             }
-
             showGlobalError(userMessage);
-            if (teamGrid) teamGrid.innerHTML = contentErrorMessage;
-            
-            const adminTeamList = document.getElementById('adminTeamList');
-            if(adminTeamList) adminTeamList.innerHTML = `<p class="text-center text-gray-500 py-4">Tidak dapat memuatkan data. Sila lihat ralat di atas.</p>`;
+            if (context === 'Team Members') document.getElementById('teamGrid').innerHTML = contentErrorMessage;
+            if (context === 'Social Links') document.getElementById('socialLinksGrid').innerHTML = contentErrorMessage;
+            if (document.getElementById('adminTeamList')) document.getElementById('adminTeamList').innerHTML = `<p class="text-center text-gray-500 py-4">Tidak dapat memuatkan data.</p>`;
         }
         
         // --- Data Fetching (Firestore) ---
         function listenForData() {
             if (!db) return;
-            const teamGrid = document.getElementById('teamGrid');
-            const socialGrid = document.getElementById('socialLinksGrid');
-            const adminTeamList = document.getElementById('adminTeamList');
+            showSkeletons();
 
-            teamGrid.innerHTML = Array(6).fill(createSkeletonCard()).join('');
-            socialGrid.innerHTML = Array(4).fill(createSocialSkeletonCard()).join('');
-            if (adminTeamList) {
-                adminTeamList.innerHTML = Array(3).fill(createAdminSkeletonItem()).join('');
-            }
-
+            db.collection('settings').doc('siteConfig').onSnapshot(doc => {
+                hideGlobalError();
+                siteConfig = doc.exists ? doc.data() : DEFAULT_SITE_CONFIG;
+                renderPageContent();
+                renderAdminSettingsForm();
+            }, e => handleFirestoreError(e, 'Site Config'));
 
             db.collection('teamMembers').onSnapshot(snapshot => {
-                hideGlobalError();
                 let members = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-                // Sort by 'order' field, putting items without 'order' at the end.
-                members.sort((a, b) => {
-                    const orderA = typeof a.order === 'number' ? a.order : Infinity;
-                    const orderB = typeof b.order === 'number' ? b.order : Infinity;
-                    if (orderA === orderB) {
-                        // If order is the same or both are missing, sort by name
-                        return (a.name || '').localeCompare(b.name || '');
-                    }
-                    return orderA - orderB;
-                });
-
+                members.sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity) || (a.name || '').localeCompare(b.name || ''));
                 teamMembers = members;
                 renderAllMembers();
                 renderAdminList();
                 setupScrollAnimation();
-            }, handleFirestoreError);
+            }, e => handleFirestoreError(e, 'Team Members'));
 
             db.collection('socialLinks').onSnapshot(snapshot => {
-                socialLinks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                let links = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                links.sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity) || (a.name || '').localeCompare(b.name || ''));
+                socialLinks = links;
                 renderSocialLinks();
+                renderAdminSocialList();
                 setupScrollAnimation();
-            }, handleFirestoreError);
+            }, e => handleFirestoreError(e, 'Social Links'));
+
+            db.collection('webmobileSliders').orderBy('order').onSnapshot(snapshot => {
+                webmobileSliders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderWebmobileSliders();
+                renderAdminSliderList();
+            }, e => handleFirestoreError(e, 'Web & Mobile Sliders'));
         }
         
         // --- Rendering Functions ---
-        function getAvatarColor(name) {
+        function showSkeletons() {
+            document.getElementById('teamGrid').innerHTML = Array(6).fill(createSkeletonCard()).join('');
+            document.getElementById('socialLinksGrid').innerHTML = Array(4).fill(createSocialSkeletonCard()).join('');
+            if (document.getElementById('adminTeamList')) document.getElementById('adminTeamList').innerHTML = Array(3).fill(createAdminSkeletonItem()).join('');
+        }
+
+        function getAvatarColor(name = '') {
             let hash = 0;
             for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
             return COLORS[Math.abs(hash % COLORS.length)];
         }
 
-        function createSkeletonCard() {
-            return `<div class="bg-white/25 backdrop-blur-lg rounded-2xl p-4 shadow-xl border border-white/30 animate-pulse"><div class="flex items-center space-x-3 mb-4"><div class="w-10 h-10 rounded-full bg-gray-300/50 flex-shrink-0"></div><div class="flex-1 min-w-0 space-y-2"><div class="h-3 bg-gray-300/50 rounded"></div><div class="h-3 bg-gray-300/50 rounded w-3/4"></div></div></div><div class="w-full h-8 rounded-xl bg-gray-300/50"></div></div>`;
-        }
-        
-        function createSocialSkeletonCard() {
-            return `<div class="bg-white/25 backdrop-blur-lg rounded-3xl p-3 shadow-xl border border-white/50 animate-pulse"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-xl bg-gray-300/50 flex-shrink-0"></div><div class="flex-1 min-w-0 space-y-2"><div class="h-3 bg-gray-300/50 rounded"></div><div class="h-2 bg-gray-300/50 rounded w-1/2"></div></div></div>`;
-        }
+        function createSkeletonCard() { return `<div class="bg-white/25 backdrop-blur-lg rounded-2xl p-4 shadow-xl border border-white/30 animate-pulse"><div class="flex items-center space-x-3 mb-4"><div class="w-10 h-10 rounded-full bg-gray-300/50 flex-shrink-0"></div><div class="flex-1 min-w-0 space-y-2"><div class="h-3 bg-gray-300/50 rounded"></div><div class="h-3 bg-gray-300/50 rounded w-3/4"></div></div></div><div class="w-full h-8 rounded-xl bg-gray-300/50"></div></div>`; }
+        function createSocialSkeletonCard() { return `<div class="bg-white/25 backdrop-blur-lg rounded-3xl p-3 shadow-xl border border-white/50 animate-pulse"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-xl bg-gray-300/50 flex-shrink-0"></div><div class="flex-1 min-w-0 space-y-2"><div class="h-3 bg-gray-300/50 rounded"></div><div class="h-2 bg-gray-300/50 rounded w-1/2"></div></div></div>`; }
+        function createAdminSkeletonItem() { return `<div class="bg-white/50 backdrop-blur-lg rounded-xl p-3 flex items-center justify-between shadow-md border border-white/30 animate-pulse"><div class="flex items-center space-x-3 min-w-0 flex-1"><div class="w-10 h-10 rounded-full bg-gray-300/50 flex-shrink-0"></div><div class="min-w-0 space-y-2 flex-1"><div class="h-4 bg-gray-300/50 rounded w-1/2"></div><div class="h-3 bg-gray-300/50 rounded w-3/4"></div></div></div><div class="flex items-center space-x-2 flex-shrink-0"><div class="w-8 h-8 rounded-full bg-gray-300/50"></div><div class="w-8 h-8 rounded-full bg-gray-300/50"></div></div></div>`; }
 
-        function createAdminSkeletonItem() {
-            return `<div class="bg-white/50 backdrop-blur-lg rounded-xl p-3 flex items-center justify-between shadow-md border border-white/30 animate-pulse"><div class="flex items-center space-x-3 min-w-0 flex-1"><div class="w-10 h-10 rounded-full bg-gray-300/50 flex-shrink-0"></div><div class="min-w-0 space-y-2 flex-1"><div class="h-4 bg-gray-300/50 rounded w-1/2"></div><div class="h-3 bg-gray-300/50 rounded w-3/4"></div></div></div><div class="flex items-center space-x-2 flex-shrink-0"><div class="w-8 h-8 rounded-full bg-gray-300/50"></div><div class="w-8 h-8 rounded-full bg-gray-300/50"></div></div></div>`;
+        function renderPageContent() {
+            document.getElementById('headerBannerImg').src = siteConfig.bannerImageUrl || DEFAULT_SITE_CONFIG.bannerImageUrl;
+            document.getElementById('headerTitleText').textContent = siteConfig.headerTitle || DEFAULT_SITE_CONFIG.headerTitle;
+            document.getElementById('headerSubtitleText').textContent = siteConfig.headerSubtitle || DEFAULT_SITE_CONFIG.headerSubtitle;
         }
 
         function createMemberCard(member) {
@@ -427,372 +454,520 @@
         }
 
         function createSocialLinkCard(link) {
-            const icons = {
-                telegram: `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>`,
-                facebook: `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
-                instagram: `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
+            const icons = { 
+                telegram: `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>`, 
+                facebook: `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`, 
+                instagram: `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`, 
                 tiktok: `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`,
+                twitter: `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+                blog: `<svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>`
             };
-            const colors = {
-                telegram: 'from-blue-500 to-sky-500',
-                facebook: 'from-blue-600 to-blue-700',
-                instagram: 'from-pink-500 to-purple-600',
+            const colors = { 
+                telegram: 'from-blue-500 to-sky-500', 
+                facebook: 'from-blue-600 to-blue-700', 
+                instagram: 'from-pink-500 to-purple-600', 
                 tiktok: 'from-gray-800 to-black',
+                twitter: 'from-sky-500 to-blue-500',
+                blog: 'from-teal-500 to-cyan-600'
             };
-            const iconHtml = icons[link.icon] || `<svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>`;
-            const colorClass = colors[link.icon] || 'bg-gray-400';
-
+            const iconHtml = icons[link.icon] || icons['blog']; // Default to blog/link icon
+            const colorClass = colors[link.icon] || colors['blog'];
             return `<a href="${link.url}" target="_blank" rel="noopener noreferrer" class="scroll-fade-in block relative bg-gradient-to-br from-white/40 via-white/30 to-white/20 backdrop-blur-xl rounded-3xl p-3 shadow-xl border border-white/50 transform hover:scale-105 transition-all duration-300 overflow-hidden"><div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-xl"></div><div class="relative z-10 flex items-center space-x-3"><div class="w-8 h-8 bg-gradient-to-br ${colorClass} rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">${iconHtml}</div><div class="text-left min-w-0"><h4 class="text-sm font-bold text-gray-800">${link.name}</h4><p class="text-gray-600 whitespace-nowrap" style="font-size: 0.65rem;">${link.handle}</p></div></div></a>`;
         }
         
         function renderAllMembers() {
             const teamGrid = document.getElementById('teamGrid');
-            const membersToRender = teamMembers.length > 0 ? teamMembers : DEFAULT_TEAM_MEMBERS;
-            teamGrid.innerHTML = membersToRender.map(createMemberCard).join('');
+            if(teamMembers.length === 0) {
+                 teamGrid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-4">Tiada ahli pasukan dijumpai. Sila tambah ahli melalui panel admin.</p>`;
+                 return;
+            }
+            teamGrid.innerHTML = teamMembers.map(createMemberCard).join('');
         }
         
         function renderSocialLinks() {
             const socialGrid = document.getElementById('socialLinksGrid');
-            const linksToRender = socialLinks.length > 0 ? socialLinks : DEFAULT_SOCIAL_LINKS;
-            socialGrid.innerHTML = linksToRender.map(createSocialLinkCard).join('');
+            if(socialLinks.length === 0) {
+                 socialGrid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-4">Tiada pautan media sosial dijumpai. Sila tambah pautan melalui panel admin.</p>`;
+                 return;
+            }
+            socialGrid.innerHTML = socialLinks.map(createSocialLinkCard).join('');
+        }
+
+        function renderWebmobileSliders() {
+            const container = document.getElementById('dynamicSwiperContainer');
+            if (!container) return;
+            container.innerHTML = ''; // Clear previous sliders
+
+            if (webmobileSliders.length === 0) {
+                container.innerHTML = `<div class="text-center text-gray-500 py-10 bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-xl">Tiada kandungan web & mobile dijumpai.</div>`;
+                return;
+            }
+
+            webmobileSliders.forEach((slider, index) => {
+                const swiperId = `swiper-${slider.id}`;
+                const slidesHtml = slider.images && slider.images.length > 0 
+                    ? slider.images.map(src => `<div class="swiper-slide"><div class="w-full aspect-[1/1.414] bg-white/30 rounded-2xl overflow-hidden shadow-lg border border-white/20"><img src="${src}" class="w-full h-full object-cover" loading="lazy" alt="Slider image"></div></div>`).join('')
+                    : `<div class="swiper-slide"><div class="w-full aspect-[1/1.414] bg-white/30 rounded-2xl flex items-center justify-center"><p class="text-gray-500">Tiada imej</p></div></div>`;
+                
+                const sliderHtml = `
+                    <div class="swiper ${swiperId}">
+                        <div class="swiper-wrapper">
+                            ${slidesHtml}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += sliderHtml;
+            });
+
+            // Initialize all new swipers
+            webmobileSliders.forEach((slider, index) => {
+                const swiperId = `.swiper-${slider.id}`;
+                new Swiper(swiperId, { 
+                    slidesPerView: 2, 
+                    spaceBetween: 16, 
+                    loop: slider.images && slider.images.length > 1, 
+                    centeredSlides: true, 
+                    speed: 600, 
+                    autoplay: { 
+                        delay: 2000 + (index * 200), // Stagger autoplays slightly
+                        disableOnInteraction: false,
+                        reverseDirection: index % 2 !== 0 // Alternate direction
+                    }, 
+                    slidesPerGroup: 1, 
+                    allowTouchMove: true 
+                });
+            });
         }
 
         function renderAdminList() {
             const adminList = document.getElementById('adminTeamList');
             if (!adminList) return;
-            
-            if (teamMembers.length === 0) {
-                adminList.innerHTML = `<p class="text-center text-gray-500 py-4">No team members found. Click 'Add Member' to start.</p>`;
-                return;
-            }
-
+            if (teamMembers.length === 0) { adminList.innerHTML = `<p class="text-center text-gray-500 py-4">Tiada ahli pasukan dijumpai. Klik 'Tambah Ahli' untuk bermula.</p>`; return; }
             adminList.innerHTML = teamMembers.map((member, index) => {
                 const initial = member.name.charAt(0).toUpperCase();
                 const colorClasses = getAvatarColor(member.name);
-                const avatarHtml = member.image
-                    ? `<img src="${member.image}" alt="${member.name}" class="w-10 h-10 rounded-full object-cover flex-shrink-0">`
-                    : `<div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${colorClasses}"><span class="font-semibold text-base">${initial}</span></div>`;
-
-                const isFirst = index === 0;
-                const isLast = index === teamMembers.length - 1;
-                const disabledUpClasses = isFirst ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-200/50 text-gray-600';
-                const disabledDownClasses = isLast ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-200/50 text-gray-600';
-
-                return `<div class="bg-white/50 backdrop-blur-lg rounded-xl p-3 flex items-center justify-between shadow-md border border-white/30"><div class="flex items-center space-x-3 min-w-0 flex-1">${avatarHtml}<div class="min-w-0"><p class="font-semibold text-sm text-gray-800 truncate">${member.name}</p><p class="text-xs text-gray-600 truncate">${member.role}</p></div></div><div class="flex items-center space-x-1 flex-shrink-0"><button onclick="moveMember(${index}, 'up')" class="p-2 rounded-full transition-colors ${disabledUpClasses}" ${isFirst ? 'disabled' : ''} aria-label="Move ${member.name} up"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" /></svg></button><button onclick="moveMember(${index}, 'down')" class="p-2 rounded-full transition-colors ${disabledDownClasses}" ${isLast ? 'disabled' : ''} aria-label="Move ${member.name} down"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg></button><button onclick="showMemberForm('${member.id}')" class="p-2 rounded-full hover:bg-blue-100/50 transition-colors text-blue-600" aria-label="Edit ${member.name}"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button><button onclick="deleteMember('${member.id}')" class="p-2 rounded-full hover:bg-red-100/50 transition-colors text-red-600" aria-label="Delete ${member.name}"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button></div></div>`;
+                const avatarHtml = member.image ? `<img src="${member.image}" alt="${member.name}" class="w-10 h-10 rounded-full object-cover flex-shrink-0">` : `<div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${colorClasses}"><span class="font-semibold text-base">${initial}</span></div>`;
+                const isFirst = index === 0, isLast = index === teamMembers.length - 1;
+                return `<div class="bg-white/50 backdrop-blur-lg rounded-xl p-3 flex items-center justify-between shadow-md border border-white/30"><div class="flex items-center space-x-3 min-w-0 flex-1">${avatarHtml}<div class="min-w-0"><p class="font-semibold text-sm text-gray-800 truncate">${member.name}</p><p class="text-xs text-gray-600 truncate">${member.role}</p></div></div><div class="flex items-center space-x-1 flex-shrink-0"><button onclick="moveItem('teamMembers', ${index}, 'up')" class="p-2 rounded-full transition-colors ${isFirst ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-200/50 text-gray-600'}" ${isFirst ? 'disabled' : ''} aria-label="Move up"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" /></svg></button><button onclick="moveItem('teamMembers', ${index}, 'down')" class="p-2 rounded-full transition-colors ${isLast ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-200/50 text-gray-600'}" ${isLast ? 'disabled' : ''} aria-label="Move down"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg></button><button onclick="showMemberForm('${member.id}')" class="p-2 rounded-full hover:bg-blue-100/50 transition-colors text-blue-600" aria-label="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button><button onclick="deleteMember('${member.id}')" class="p-2 rounded-full hover:bg-red-100/50 transition-colors text-red-600" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button></div></div>`;
             }).join('');
         }
 
-        function renderSliders() {
-            const swiperWrapper1 = document.getElementById('swiperWrapper1');
-            const swiperWrapper2 = document.getElementById('swiperWrapper2');
-
-            const createSlide = (src, alt) => `<div class="swiper-slide"><div class="w-full aspect-[1/1.414] bg-white/30 rounded-2xl overflow-hidden shadow-lg border border-white/20"><img src="${src}" class="w-full h-full object-cover" loading="lazy" alt="${alt}"></div></div>`;
-
-            if (swiperWrapper1) swiperWrapper1.innerHTML = SLIDER_IMAGES_ROW1.map(src => createSlide(src, "Collection Image")).join('');
-            if (swiperWrapper2) swiperWrapper2.innerHTML = SLIDER_IMAGES_ROW2.map(src => createSlide(src, "Collection Image")).join('');
+        function renderAdminSocialList() {
+            const adminList = document.getElementById('adminSocialList');
+            if (!adminList) return;
+            if (socialLinks.length === 0) { adminList.innerHTML = `<p class="text-center text-gray-500 py-4">Tiada pautan sosial dijumpai. Klik 'Tambah Pautan' untuk bermula.</p>`; return; }
+            adminList.innerHTML = socialLinks.map((link, index) => {
+                const isFirst = index === 0, isLast = index === socialLinks.length - 1;
+                return `<div class="bg-white/50 backdrop-blur-lg rounded-xl p-3 flex items-center justify-between shadow-md border border-white/30"><div class="flex items-center space-x-3 min-w-0 flex-1"><div class="w-10 h-10 rounded-lg bg-gray-700 text-white flex items-center justify-center text-xs font-mono flex-shrink-0">${link.icon}</div><div class="min-w-0"><p class="font-semibold text-sm text-gray-800 truncate">${link.name}</p><p class="text-xs text-gray-600 truncate">${link.handle}</p></div></div><div class="flex items-center space-x-1 flex-shrink-0"><button onclick="moveItem('socialLinks', ${index}, 'up')" class="p-2 rounded-full transition-colors ${isFirst ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-200/50 text-gray-600'}" ${isFirst ? 'disabled' : ''} aria-label="Move up"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" /></svg></button><button onclick="moveItem('socialLinks', ${index}, 'down')" class="p-2 rounded-full transition-colors ${isLast ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-200/50 text-gray-600'}" ${isLast ? 'disabled' : ''} aria-label="Move down"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg></button><button onclick="showSocialLinkForm('${link.id}')" class="p-2 rounded-full hover:bg-blue-100/50 transition-colors text-blue-600" aria-label="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button><button onclick="deleteSocialLink('${link.id}')" class="p-2 rounded-full hover:bg-red-100/50 transition-colors text-red-600" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button></div></div>`;
+            }).join('');
         }
         
-        // --- UI & Interaction ---
-        function initSwipers() {
-            new Swiper(".mySwiper1", { slidesPerView: 2, spaceBetween: 16, loop: true, centeredSlides: true, speed: 600, autoplay: { delay: 2000, disableOnInteraction: false }, slidesPerGroup: 1, allowTouchMove: true });
-            new Swiper(".mySwiper2", { slidesPerView: 2, spaceBetween: 16, loop: true, centeredSlides: true, speed: 600, autoplay: { delay: 2000, disableOnInteraction: false, reverseDirection: true }, slidesPerGroup: 1, allowTouchMove: true });
-        }
-
-        function contactMember(memberId) {
-            const member = teamMembers.find(m => m.id === memberId);
-            if (!member) {
-                showToast('Member not found.', 'error');
+        function renderAdminSliderList() {
+            const adminList = document.getElementById('adminSliderList');
+            if (!adminList) return;
+            if (webmobileSliders.length === 0) {
+                adminList.innerHTML = `<p class="text-center text-gray-500 py-4">Tiada slider dijumpai. Klik 'Tambah Slider' untuk bermula.</p>`;
                 return;
             }
-
-            const { phone, name, image } = member;
-
-            closePopup(); 
-
-            const popup = document.createElement('div');
-            popup.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in contact-confirm-popup';
-            
-            let avatarPopupHtml;
-            if (image) {
-                avatarPopupHtml = `<div class="w-24 h-24 mx-auto mb-4 rounded-xl overflow-hidden border-4 border-white shadow-lg"><img src="${image}" alt="${name}" class="w-full h-full object-cover"></div>`;
-            } else {
-                const initial = name.charAt(0).toUpperCase();
-                const colorClasses = getAvatarColor(name);
-                avatarPopupHtml = `<div class="w-24 h-24 rounded-xl flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-lg ${colorClasses}"><span class="font-bold text-4xl">${initial}</span></div>`;
-            }
-
-            popup.innerHTML = `
-                <div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl border border-white/50 text-center">
-                    ${avatarPopupHtml}
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Hubungi ${name}?</h3>
-                    <p class="text-sm text-gray-600 mb-6">Anda akan diarahkan ke WhatsApp untuk memulakan perbualan.</p>
-                    <div class="flex space-x-3">
-                        <button id="cancelContactBtn" class="flex-1 px-4 py-3 text-gray-700 bg-white/50 font-medium border border-gray-300/70 rounded-xl hover:bg-gray-100/50 transition-colors">
-                            Batal
-                        </button>
-                        <button id="confirmContactBtn" class="flex-1 px-4 py-3 bg-green-500 font-medium text-white rounded-xl hover:bg-green-600 transition-colors shadow-lg shadow-green-500/30">
-                            Teruskan
-                        </button>
+            adminList.innerHTML = webmobileSliders.map((slider, index) => {
+                const isFirst = index === 0, isLast = index === webmobileSliders.length - 1;
+                return `<div class="bg-white/50 backdrop-blur-lg rounded-xl p-3 flex items-center justify-between shadow-md border border-white/30">
+                    <div class="flex items-center space-x-3 min-w-0 flex-1">
+                        <div class="w-10 h-10 rounded-lg bg-purple-200 text-purple-700 flex items-center justify-center flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="font-semibold text-sm text-gray-800 truncate">${slider.name}</p>
+                            <p class="text-xs text-gray-600 truncate">${slider.images?.length || 0} imej</p>
+                        </div>
                     </div>
-                </div>
-            `;
-            
-            popup.addEventListener('click', (e) => {
-                if (e.target === popup) closePopup();
-            });
+                    <div class="flex items-center space-x-1 flex-shrink-0">
+                        <button onclick="moveItem('webmobileSliders', ${index}, 'up')" class="p-2 rounded-full transition-colors ${isFirst ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-200/50 text-gray-600'}" ${isFirst ? 'disabled' : ''} aria-label="Move up"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" /></svg></button>
+                        <button onclick="moveItem('webmobileSliders', ${index}, 'down')" class="p-2 rounded-full transition-colors ${isLast ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-200/50 text-gray-600'}" ${isLast ? 'disabled' : ''} aria-label="Move down"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg></button>
+                        <button onclick="showSliderForm('${slider.id}')" class="p-2 rounded-full hover:bg-blue-100/50 transition-colors text-blue-600" aria-label="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
+                        <button onclick="deleteSlider('${slider.id}')" class="p-2 rounded-full hover:bg-red-100/50 transition-colors text-red-600" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
 
+        function renderAdminSettingsForm() {
+            const form = document.getElementById('siteSettingsForm');
+            if(form) {
+                form.elements.bannerImageUrl.value = siteConfig.bannerImageUrl || '';
+                form.elements.headerTitle.value = siteConfig.headerTitle || '';
+                form.elements.headerSubtitle.value = siteConfig.headerSubtitle || '';
+            }
+        }
+
+        // --- UI & Interaction ---
+        function contactMember(memberId) {
+            const member = teamMembers.find(m => m.id === memberId);
+            if (!member) { showToast('Member not found.', 'error'); return; }
+            const { phone, name, image } = member;
+            closePopup(); 
+            const popup = document.createElement('div');
+            popup.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in popup';
+            let avatarPopupHtml = image ? `<div class="w-24 h-24 mx-auto mb-4 rounded-xl overflow-hidden border-4 border-white shadow-lg"><img src="${image}" alt="${name}" class="w-full h-full object-cover"></div>` : `<div class="w-24 h-24 rounded-xl flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-lg ${getAvatarColor(name)}"><span class="font-bold text-4xl">${name.charAt(0).toUpperCase()}</span></div>`;
+            popup.innerHTML = `<div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl border border-white/50 text-center">${avatarPopupHtml}<h3 class="text-lg font-semibold text-gray-900 mb-2">Hubungi ${name}?</h3><p class="text-sm text-gray-600 mb-6">Anda akan diarahkan ke WhatsApp untuk memulakan perbualan.</p><div class="flex space-x-3"><button id="cancelContactBtn" class="flex-1 px-4 py-3 text-gray-700 bg-white/50 font-medium border border-gray-300/70 rounded-xl hover:bg-gray-100/50 transition-colors">Batal</button><button id="confirmContactBtn" class="flex-1 px-4 py-3 bg-green-500 font-medium text-white rounded-xl hover:bg-green-600 transition-colors shadow-lg shadow-green-500/30">Teruskan</button></div></div>`;
+            popup.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
             document.body.appendChild(popup);
-
             document.getElementById('confirmContactBtn').addEventListener('click', () => {
                 const formattedPhone = phone.trim().startsWith('0') ? '6' + phone.trim() : phone.trim();
                 const message = encodeURIComponent(`Assalamualaikum ${name}, saya ingin bertanya mengenai...`);
                 window.open(`https://wa.me/${formattedPhone}?text=${message}`, '_blank', 'noopener,noreferrer');
                 closePopup();
             });
-
             document.getElementById('cancelContactBtn').addEventListener('click', closePopup);
         }
 
-        function closePopup() {
-            document.querySelector('.member-form-popup, .admin-login-popup, .contact-confirm-popup')?.remove();
+        function closePopup() { 
+            document.querySelectorAll('.popup').forEach(p => p.remove());
+            if (window.removeSliderImage) delete window.removeSliderImage;
         }
 
         function switchTab(selectedTab) {
-            const mainContentContainer = document.getElementById('mainContentContainer');
-            const pageHeader = document.getElementById('pageHeader');
-            const mainTabsContainer = document.getElementById('mainTabsContainer');
-            const topHomeTab = document.getElementById('topHomeTab'), topWebmobileTab = document.getElementById('topWebmobileTab');
-            const homeTab = document.getElementById('homeTab'), mediaTab = document.getElementById('mediaTab');
-            
-            const activeTopNavClasses = 'font-semibold text-amber-600';
-            const inactiveTopNavClasses = 'font-medium text-gray-600 hover:text-amber-600';
-            const baseTopNavClasses = 'text-sm transition-colors';
+            const mainContent = document.getElementById('mainContentContainer'), pageHeader = document.getElementById('pageHeader'), mainTabs = document.getElementById('mainTabsContainer');
+            const topHome = document.getElementById('topHomeTab'), topWeb = document.getElementById('topWebmobileTab');
+            const activeTop = 'font-semibold text-amber-600', inactiveTop = 'font-medium text-gray-600 hover:text-amber-600', baseTop = 'text-sm transition-colors';
             
             ['homeSection', 'mediaSection', 'webmobileSection', 'adminSection'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            
-            mainContentContainer.classList.add('pt-8', 'pb-8');
-            pageHeader.style.display = '';
-            mainTabsContainer.style.display = '';
+            mainContent.classList.add('pt-8', 'pb-8'); pageHeader.style.display = ''; mainTabs.style.display = '';
 
             if (selectedTab === 'webmobile') {
-                mainContentContainer.classList.remove('pt-8', 'pb-8');
-                pageHeader.style.display = 'none';
-                mainTabsContainer.style.display = 'none';
+                mainContent.classList.remove('pt-8', 'pb-8'); pageHeader.style.display = 'none'; mainTabs.style.display = 'none';
                 document.getElementById('webmobileSection').classList.remove('hidden');
-                topHomeTab.className = `${baseTopNavClasses} ${inactiveTopNavClasses}`;
-                topWebmobileTab.className = `${baseTopNavClasses} ${activeTopNavClasses}`;
+                topHome.className = `${baseTop} ${inactiveTop}`; topWeb.className = `${baseTop} ${activeTop}`;
             } else if (selectedTab === 'admin') {
-                pageHeader.style.display = 'none';
-                mainTabsContainer.style.display = 'none';
+                pageHeader.style.display = 'none'; mainTabs.style.display = 'none';
                 document.getElementById('adminSection').classList.remove('hidden');
             } else { 
-                topHomeTab.className = `${baseTopNavClasses} ${activeTopNavClasses}`;
-                topWebmobileTab.className = `${baseTopNavClasses} ${inactiveTopNavClasses}`;
-                const activeMainTabClasses = 'bg-amber-400 text-amber-900 shadow-lg';
-                const inactiveMainTabClasses = 'bg-white/30 text-gray-700 hover:bg-white/40';
-                const baseMainTabClasses = 'flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-200';
+                topHome.className = `${baseTop} ${activeTop}`; topWeb.className = `${baseTop} ${inactiveTop}`;
+                const homeTab = document.getElementById('homeTab'), mediaTab = document.getElementById('mediaTab');
+                const activeMain = 'bg-amber-400 text-amber-900 shadow-lg', inactiveMain = 'bg-white/30 text-gray-700 hover:bg-white/40', baseMain = 'flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-200';
                 if (selectedTab === 'home') {
                     document.getElementById('homeSection').classList.remove('hidden');
-                    homeTab.className = `${baseMainTabClasses} ${activeMainTabClasses}`;
-                    mediaTab.className = `${baseMainTabClasses} ${inactiveMainTabClasses}`;
+                    homeTab.className = `${baseMain} ${activeMain}`; mediaTab.className = `${baseMain} ${inactiveMain}`;
                 } else if (selectedTab === 'media') {
                     document.getElementById('mediaSection').classList.remove('hidden');
-                    homeTab.className = `${baseMainTabClasses} ${inactiveMainTabClasses}`;
-                    mediaTab.className = `${baseMainTabClasses} ${activeMainTabClasses}`;
+                    homeTab.className = `${baseMain} ${inactiveMain}`; mediaTab.className = `${baseMain} ${activeMain}`;
+                }
+            }
+        }
+        
+        function switchAdminTab(selectedTab) {
+            const allButtons = {
+                team: document.getElementById('adminTabTeam'),
+                social: document.getElementById('adminTabSocial'),
+                webmobile: document.getElementById('adminTabWebmobile'),
+                settings: document.getElementById('adminTabSettings')
+            };
+            const allPanels = {
+                team: document.getElementById('adminTeamPanel'),
+                social: document.getElementById('adminSocialPanel'),
+                webmobile: document.getElementById('adminWebmobilePanel'),
+                settings: document.getElementById('adminSettingsPanel')
+            };
+            const activeClasses = ['border-amber-500', 'text-amber-600'];
+            const inactiveClasses = ['border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300'];
+
+            for (const key in allPanels) {
+                const button = allButtons[key];
+                const panel = allPanels[key];
+
+                if (key === selectedTab) {
+                    panel.classList.remove('hidden');
+                    button.classList.add(...activeClasses);
+                    button.classList.remove(...inactiveClasses);
+                    button.setAttribute('aria-selected', 'true');
+                } else {
+                    panel.classList.add('hidden');
+                    button.classList.remove(...activeClasses);
+                    button.classList.add(...inactiveClasses);
+                    button.setAttribute('aria-selected', 'false');
                 }
             }
         }
         
         function setupScrollAnimation() {
             const animatedElements = document.querySelectorAll('.scroll-fade-in');
-            if (!('IntersectionObserver' in window)) {
-                animatedElements.forEach(el => el.classList.add('is-visible'));
-                return;
-            }
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
-            }, { threshold: 0.1 });
+            if (!('IntersectionObserver' in window)) { animatedElements.forEach(el => el.classList.add('is-visible')); return; }
+            const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); }); }, { threshold: 0.1 });
             animatedElements.forEach(el => observer.observe(el));
         }
 
-        // --- Admin CRUD Functions (Firestore) ---
+        // --- Admin CRUD Functions ---
         function addMember(member) {
-            if (!db) return;
-            const newOrder = teamMembers.length > 0 ? Math.max(...teamMembers.map(m => (typeof m.order === 'number' ? m.order : -1))) + 1 : 0;
-            const newMember = { ...member, order: newOrder };
-            db.collection('teamMembers').add(newMember)
-                .then(() => showToast('Member added successfully!'))
-                .catch(e => { console.error("Error adding member: ", e); showToast('Failed to add member.', 'error'); });
+            const newOrder = teamMembers.length > 0 ? Math.max(...teamMembers.map(m => m.order ?? -1)) + 1 : 0;
+            db.collection('teamMembers').add({ ...member, order: newOrder })
+                .then(() => showToast('Ahli berjaya ditambah!'))
+                .catch(e => { console.error("Error adding member: ", e); showToast('Gagal menambah ahli.', 'error'); });
         }
-
         function updateMember(id, member) {
-            if (!db) return;
             db.collection('teamMembers').doc(id).update(member)
-                .then(() => showToast('Member updated successfully!'))
-                .catch(e => { console.error("Error updating member: ", e); showToast('Failed to update member.', 'error'); });
+                .then(() => showToast('Ahli berjaya dikemas kini!'))
+                .catch(e => { console.error("Error updating member: ", e); showToast('Gagal mengemas kini ahli.', 'error'); });
         }
-
         function deleteMember(id) {
-            if (!db) return;
             const member = teamMembers.find(m => m.id === id);
-            if (member && confirm(`Are you sure you want to delete ${member.name}?`)) {
+            if (member && confirm(`Anda pasti ingin memadam ${member.name}?`)) {
                 db.collection('teamMembers').doc(id).delete()
-                    .then(() => showToast('Member deleted successfully!'))
-                    .catch(e => { console.error("Error deleting member: ", e); showToast('Failed to delete member.', 'error'); });
+                    .then(() => showToast('Ahli berjaya dipadam!'))
+                    .catch(e => { console.error("Error deleting member: ", e); showToast('Gagal memadam ahli.', 'error'); });
             }
         }
-
-        function moveMember(currentIndex, direction) {
-            if (!db) return;
-
-            // Prevent moving out of bounds
-            if ((direction === 'up' && currentIndex === 0) || (direction === 'down' && currentIndex === teamMembers.length - 1)) {
-                return;
+        function addSocialLink(link) {
+            const newOrder = socialLinks.length > 0 ? Math.max(...socialLinks.map(l => l.order ?? -1)) + 1 : 0;
+            db.collection('socialLinks').add({ ...link, order: newOrder })
+                .then(() => showToast('Pautan berjaya ditambah!'))
+                .catch(e => { console.error("Error adding social link: ", e); showToast('Gagal menambah pautan.', 'error'); });
+        }
+        function updateSocialLink(id, link) {
+            db.collection('socialLinks').doc(id).update(link)
+                .then(() => showToast('Pautan berjaya dikemas kini!'))
+                .catch(e => { console.error("Error updating social link: ", e); showToast('Gagal mengemas kini pautan.', 'error'); });
+        }
+        function deleteSocialLink(id) {
+            const link = socialLinks.find(l => l.id === id);
+            if (link && confirm(`Anda pasti ingin memadam pautan ${link.name}?`)) {
+                db.collection('socialLinks').doc(id).delete()
+                    .then(() => showToast('Pautan berjaya dipadam!'))
+                    .catch(e => { console.error("Error deleting social link: ", e); showToast('Gagal memadam pautan.', 'error'); });
             }
+        }
+        function addSlider(slider) {
+            const newOrder = webmobileSliders.length > 0 ? Math.max(...webmobileSliders.map(s => s.order ?? -1)) + 1 : 0;
+            db.collection('webmobileSliders').add({ ...slider, order: newOrder, images: slider.images || [] })
+                .then(() => showToast('Slider berjaya ditambah!'))
+                .catch(e => { console.error("Error adding slider: ", e); showToast('Gagal menambah slider.', 'error'); });
+        }
+        function updateSlider(id, slider) {
+            db.collection('webmobileSliders').doc(id).update(slider)
+                .then(() => showToast('Slider berjaya dikemas kini!'))
+                .catch(e => { console.error("Error updating slider: ", e); showToast('Gagal mengemas kini slider.', 'error'); });
+        }
+        function deleteSlider(id) {
+            const slider = webmobileSliders.find(s => s.id === id);
+            if (slider && confirm(`Anda pasti ingin memadam slider "${slider.name}"?`)) {
+                db.collection('webmobileSliders').doc(id).delete()
+                    .then(() => showToast('Slider berjaya dipadam!'))
+                    .catch(e => { console.error("Error deleting slider: ", e); showToast('Gagal memadam slider.', 'error'); });
+            }
+        }
+        
+        function moveItem(collectionName, currentIndex, direction) {
+            if (!db) return;
+            let sourceArray;
+            if (collectionName === 'teamMembers') sourceArray = teamMembers;
+            else if (collectionName === 'socialLinks') sourceArray = socialLinks;
+            else if (collectionName === 'webmobileSliders') sourceArray = webmobileSliders;
+            else return;
 
-            // Create a new array with the moved item in its new position
-            const newTeamMembers = [...teamMembers];
-            const [movedItem] = newTeamMembers.splice(currentIndex, 1);
-            const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-            newTeamMembers.splice(newIndex, 0, movedItem);
+            if ((direction === 'up' && currentIndex === 0) || (direction === 'down' && currentIndex === sourceArray.length - 1)) return;
+            
+            let listId;
+            if (collectionName === 'teamMembers') listId = 'adminTeamList';
+            else if (collectionName === 'socialLinks') listId = 'adminSocialList';
+            else if (collectionName === 'webmobileSliders') listId = 'adminSliderList';
 
-            // Temporarily disable all admin buttons to prevent race conditions
-            const adminButtons = document.querySelectorAll('#adminTeamList button');
-            adminButtons.forEach(btn => { btn.disabled = true; });
-
+            document.querySelectorAll(`#${listId} button`).forEach(btn => btn.disabled = true);
+            const newArray = [...sourceArray];
+            const [movedItem] = newArray.splice(currentIndex, 1);
+            newArray.splice(direction === 'up' ? currentIndex - 1 : currentIndex + 1, 0, movedItem);
+            
             const batch = db.batch();
-            let updatesMade = false;
-
-            newTeamMembers.forEach((member, index) => {
-                // Update the document's order if it doesn't match its new position in the array
-                if (member.order !== index) {
-                    const memberRef = db.collection('teamMembers').doc(member.id);
-                    batch.update(memberRef, { order: index });
-                    updatesMade = true;
+            newArray.forEach((item, index) => {
+                if (item.order !== index) {
+                    batch.update(db.collection(collectionName).doc(item.id), { order: index });
                 }
             });
-
-            if (updatesMade) {
-                batch.commit()
-                    .then(() => {
-                        showToast('Member order updated!');
-                        // The onSnapshot listener will automatically re-render the list with correct button states.
-                    })
-                    .catch(e => {
-                        console.error("Error reordering members: ", e);
-                        showToast('Failed to update order.', 'error');
-                        // Re-enable buttons only on failure, as success causes a re-render that handles this.
-                        adminButtons.forEach(btn => { btn.disabled = false; });
-                    });
-            } else {
-                // If no updates were needed (e.g., data was already consistent), re-enable buttons.
-                adminButtons.forEach(btn => { btn.disabled = false; });
-            }
+            batch.commit()
+                .then(() => showToast('Susunan berjaya dikemas kini!'))
+                .catch(e => { console.error("Error reordering: ", e); showToast('Gagal mengemas kini susunan.', 'error'); });
         }
 
         function showMemberForm(id = null) {
             closePopup();
             const isEditing = id !== null;
             const member = isEditing ? teamMembers.find(m => m.id === id) : { name: '', phone: '', role: '', image: '' };
-            if (isEditing && !member) { showToast("Member not found!", "error"); return; }
-
+            if (isEditing && !member) { showToast("Ahli tidak dijumpai!", "error"); return; }
             const popup = document.createElement('div');
-            popup.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in member-form-popup';
-            popup.innerHTML = `<div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl border border-white/50"><h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">${isEditing ? 'Edit Team Member' : 'Add New Member'}</h3><form id="memberForm" class="space-y-4"><div><label for="memberName" class="text-sm font-medium text-gray-700 block mb-1">Name</label><input type="text" id="memberName" name="name" value="${member.name}" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div><label for="memberPhone" class="text-sm font-medium text-gray-700 block mb-1">Phone (e.g., 0123456789)</label><input type="tel" id="memberPhone" name="phone" value="${member.phone}" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div><label for="memberRole" class="text-sm font-medium text-gray-700 block mb-1">Role</label><input type="text" id="memberRole" name="role" value="${member.role}" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div><label for="memberImage" class="text-sm font-medium text-gray-700 block mb-1">Image URL (Optional)</label><input type="url" id="memberImage" name="image" value="${member.image || ''}" placeholder="https://example.com/image.png" class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div class="flex space-x-3 pt-2"><button type="button" onclick="closePopup()" class="flex-1 px-4 py-3 text-gray-700 bg-white/50 font-medium border border-gray-300/70 rounded-xl hover:bg-gray-100/50 transition-colors">Cancel</button><button type="submit" class="flex-1 px-4 py-3 bg-amber-500 font-medium text-white rounded-xl hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/30">Save</button></div></form></div>`;
+            popup.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in popup';
+            popup.innerHTML = `<div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl border border-white/50"><h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">${isEditing ? 'Edit Ahli Pasukan' : 'Tambah Ahli Baharu'}</h3><form id="memberForm" class="space-y-4"><div><label for="memberName" class="text-sm font-medium text-gray-700 block mb-1">Nama</label><input type="text" id="memberName" name="name" value="${member.name}" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div><label for="memberPhone" class="text-sm font-medium text-gray-700 block mb-1">Telefon (cth: 0123456789)</label><input type="tel" id="memberPhone" name="phone" value="${member.phone}" required pattern="[0-9]{10,13}" class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div><label for="memberRole" class="text-sm font-medium text-gray-700 block mb-1">Jawatan</label><input type="text" id="memberRole" name="role" value="${member.role}" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div><label for="memberImage" class="text-sm font-medium text-gray-700 block mb-1">URL Gambar (Pilihan)</label><input type="url" id="memberImage" name="image" value="${member.image || ''}" placeholder="https://example.com/image.png" class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div class="flex space-x-3 pt-2"><button type="button" onclick="closePopup()" class="flex-1 px-4 py-3 text-gray-700 bg-white/50 font-medium border border-gray-300/70 rounded-xl hover:bg-gray-100/50 transition-colors">Batal</button><button type="submit" class="flex-1 px-4 py-3 bg-amber-500 font-medium text-white rounded-xl hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/30">Simpan</button></div></form></div>`;
             popup.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
             document.body.appendChild(popup);
             document.getElementById('memberForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                const newMemberData = { name: formData.get('name').trim(), phone: formData.get('phone').trim(), role: formData.get('role').trim(), image: formData.get('image').trim() || null };
-                if (isEditing) updateMember(id, newMemberData); else addMember(newMemberData);
+                e.preventDefault(); const formData = new FormData(e.target);
+                const data = { name: formData.get('name').trim(), phone: formData.get('phone').trim(), role: formData.get('role').trim(), image: formData.get('image').trim() || null };
+                if (isEditing) updateMember(id, data); else addMember(data);
                 closePopup();
             });
         }
         
-        // --- Admin Authentication ---
-        function updateAuthUI(user) {
-            const adminAccessButton = document.getElementById('adminAccessButton');
-            const logoutButton = document.getElementById('logoutButton');
-
-            if (!adminAccessButton || !logoutButton) return;
-
-            if (user) { // Logged in
-                // Change the button to be a direct link to the admin panel
-                adminAccessButton.onclick = () => switchTab('admin');
-                
-                // Show the logout button
-                logoutButton.classList.remove('hidden');
-            } else { // Logged out
-                // Change the button to open the login modal
-                adminAccessButton.onclick = showAdminLogin;
-
-                // Hide the logout button
-                logoutButton.classList.add('hidden');
-                
-                // If user logs out while on the admin page, switch them back to home
-                const adminSection = document.getElementById('adminSection');
-                if (adminSection && !adminSection.classList.contains('hidden')) {
-                    switchTab('home');
-                }
-            }
-        }
-
-        function handleAdminLogout() {
-            if (!auth) return;
-            auth.signOut().catch(error => {
-                console.error('Sign out error', error);
-                showToast('Failed to log out.', 'error');
-            });
-        }
-        
-        function showAdminLogin() {
-            if (!auth) {
-                showGlobalError("Perkhidmatan pengesahan tidak tersedia kerana masalah konfigurasi Firebase.");
-                return;
-            }
-            if (auth.currentUser) { switchTab('admin'); return; }
-
+        function showSocialLinkForm(id = null) {
             closePopup();
+            const isEditing = id !== null;
+            const link = isEditing ? socialLinks.find(l => l.id === id) : { name: '', handle: '', url: '', icon: 'telegram' };
+            if (isEditing && !link) { showToast("Pautan tidak dijumpai!", "error"); return; }
             const popup = document.createElement('div');
-            popup.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in admin-login-popup';
-            popup.innerHTML = `<div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl border border-white/50"><h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">Admin Login</h3><form id="adminLoginForm" class="space-y-4"><p id="loginError" class="text-red-500 text-sm text-center hidden mb-2"></p><div><label for="adminEmail" class="text-sm font-medium text-gray-700 block mb-1">Email</label><input type="email" id="adminEmail" name="email" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div><label for="adminPassword" class="text-sm font-medium text-gray-700 block mb-1">Password</label><input type="password" id="adminPassword" name="password" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div class="flex space-x-3 pt-2"><button type="button" onclick="closePopup()" class="flex-1 px-4 py-3 text-gray-700 bg-white/50 font-medium border border-gray-300/70 rounded-xl hover:bg-gray-100/50 transition-colors">Cancel</button><button type="submit" class="flex-1 px-4 py-3 bg-amber-500 font-medium text-white rounded-xl hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/30">Login</button></div></form></div>`;
+            popup.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in popup';
+            popup.innerHTML = `<div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl border border-white/50"><h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">${isEditing ? 'Edit Pautan Sosial' : 'Tambah Pautan Baharu'}</h3><form id="socialForm" class="space-y-4"><div><label for="socialName" class="text-sm font-medium text-gray-700 block mb-1">Nama</label><input type="text" id="socialName" name="name" value="${link.name}" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"></div><div><label for="socialHandle" class="text-sm font-medium text-gray-700 block mb-1">Handle / Nama Pengguna</label><input type="text" id="socialHandle" name="handle" value="${link.handle}" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"></div><div><label for="socialUrl" class="text-sm font-medium text-gray-700 block mb-1">URL Penuh</label><input type="url" id="socialUrl" name="url" value="${link.url}" required placeholder="https://..." class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"></div><div><label for="socialIcon" class="text-sm font-medium text-gray-700 block mb-1">Ikon</label><select id="socialIcon" name="icon" class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">${['telegram', 'facebook', 'instagram', 'tiktok', 'twitter', 'blog'].map(i => `<option value="${i}" ${link.icon === i ? 'selected' : ''}>${i.charAt(0).toUpperCase() + i.slice(1)}</option>`).join('')}</select></div><div class="flex space-x-3 pt-2"><button type="button" onclick="closePopup()" class="flex-1 px-4 py-3 text-gray-700 bg-white/50 font-medium border border-gray-300/70 rounded-xl hover:bg-gray-100/50 transition-colors">Batal</button><button type="submit" class="flex-1 px-4 py-3 bg-blue-500 font-medium text-white rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/30">Simpan</button></div></form></div>`;
             popup.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
             document.body.appendChild(popup);
-            document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
+            document.getElementById('socialForm').addEventListener('submit', (e) => {
+                e.preventDefault(); const formData = new FormData(e.target);
+                const data = { name: formData.get('name').trim(), handle: formData.get('handle').trim(), url: formData.get('url').trim(), icon: formData.get('icon') };
+                if (isEditing) updateSocialLink(id, data); else addSocialLink(data);
+                closePopup();
+            });
         }
 
-        function handleAdminLogin(event) {
-            event.preventDefault();
-            const email = event.target.email.value;
-            const password = event.target.password.value;
-            const errorP = document.getElementById('loginError');
-            const submitBtn = event.target.querySelector('button[type="submit"]');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Logging in...';
+        function showSliderForm(id = null) {
+            closePopup();
+            const isEditing = id !== null;
+            const slider = isEditing ? webmobileSliders.find(s => s.id === id) : { name: '', images: [] };
+            if (isEditing && !slider) { showToast("Slider tidak dijumpai!", "error"); return; }
+            
+            let currentImages = [...(slider.images || [])];
 
+            const popup = document.createElement('div');
+            popup.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in popup';
+            popup.innerHTML = `
+                <div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 mx-4 max-w-md w-full shadow-2xl border border-white/50">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">${isEditing ? 'Edit Slider' : 'Tambah Slider Baharu'}</h3>
+                    <form id="sliderForm" class="space-y-4">
+                        <div>
+                            <label for="sliderName" class="text-sm font-medium text-gray-700 block mb-1">Nama Slider</label>
+                            <input type="text" id="sliderName" name="name" value="${slider.name || ''}" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition">
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 block mb-1">Imej</label>
+                            <div id="sliderImagesList" class="space-y-2 max-h-48 overflow-y-auto p-2 bg-gray-100/50 rounded-lg border">
+                                <!-- Images will be rendered here -->
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <input type="url" id="newImageUrl" placeholder="https://.../imej.jpg" class="flex-grow w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition">
+                            <button type="button" id="addImageBtn" class="px-4 py-2 bg-green-500 text-white font-medium rounded-xl hover:bg-green-600 transition-colors shadow-lg shadow-green-500/30 flex-shrink-0">Tambah</button>
+                        </div>
+                        <div class="flex space-x-3 pt-2">
+                            <button type="button" onclick="closePopup()" class="flex-1 px-4 py-3 text-gray-700 bg-white/50 font-medium border border-gray-300/70 rounded-xl hover:bg-gray-100/50 transition-colors">Batal</button>
+                            <button type="submit" class="flex-1 px-4 py-3 bg-purple-500 font-medium text-white rounded-xl hover:bg-purple-600 transition-colors shadow-lg shadow-purple-500/30">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            popup.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
+            document.body.appendChild(popup);
+
+            const imagesListEl = document.getElementById('sliderImagesList');
+            const newImageUrlInput = document.getElementById('newImageUrl');
+
+            function renderImagesInForm() {
+                if (currentImages.length === 0) {
+                    imagesListEl.innerHTML = '<p class="text-center text-xs text-gray-500 py-2">Tiada imej ditambah.</p>';
+                } else {
+                    imagesListEl.innerHTML = currentImages.map((imgUrl, index) => `
+                        <div class="flex items-center justify-between bg-white p-2 rounded-md text-xs">
+                            <span class="truncate pr-2 flex-1 min-w-0">${imgUrl}</span>
+                            <button type="button" onclick="window.removeSliderImage(${index})" class="p-1 rounded-full hover:bg-red-100 text-red-500 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+            
+            window.removeSliderImage = (index) => {
+                currentImages.splice(index, 1);
+                renderImagesInForm();
+            };
+
+            document.getElementById('addImageBtn').addEventListener('click', () => {
+                const url = newImageUrlInput.value.trim();
+                if (url) {
+                    try {
+                        new URL(url); // Validate URL
+                        currentImages.push(url);
+                        newImageUrlInput.value = '';
+                        newImageUrlInput.focus();
+                        renderImagesInForm();
+                    } catch(_) {
+                        showToast('Sila masukkan URL yang sah.', 'error');
+                    }
+                }
+            });
+
+            document.getElementById('sliderForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const data = {
+                    name: document.getElementById('sliderName').value.trim(),
+                    images: currentImages
+                };
+                if (isEditing) updateSlider(id, data); else addSlider(data);
+                closePopup();
+            });
+
+            renderImagesInForm();
+        }
+
+        // --- Admin Authentication & Site Settings---
+        function updateAuthUI(user) {
+            const adminButton = document.getElementById('adminAccessButton'), logoutButton = document.getElementById('logoutButton');
+            if (user) {
+                adminButton.onclick = () => switchTab('admin');
+                logoutButton.classList.remove('hidden');
+            } else {
+                adminButton.onclick = showAdminLogin;
+                logoutButton.classList.add('hidden');
+                const adminSection = document.getElementById('adminSection');
+                if (adminSection && !adminSection.classList.contains('hidden')) switchTab('home');
+            }
+        }
+
+        function handleAdminLogout() { auth?.signOut().catch(e => { console.error('Sign out error', e); showToast('Gagal log keluar.', 'error'); }); }
+        
+        function showAdminLogin() {
+            if (!auth) { showGlobalError("Perkhidmatan pengesahan tidak tersedia."); return; }
+            if (auth.currentUser) { switchTab('admin'); return; }
+            closePopup();
+            const popup = document.createElement('div');
+            popup.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in popup';
+            popup.innerHTML = `<div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl border border-white/50"><h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">Admin Login</h3><form id="adminLoginForm" class="space-y-4"><p id="loginError" class="text-red-500 text-sm text-center hidden mb-2"></p><div><label for="adminEmail" class="text-sm font-medium text-gray-700 block mb-1">Email</label><input type="email" id="adminEmail" name="email" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div><label for="adminPassword" class="text-sm font-medium text-gray-700 block mb-1">Password</label><input type="password" id="adminPassword" name="password" required class="w-full px-3 py-2 bg-white/50 border border-gray-300/70 rounded-lg focus:ring-amber-500 focus:border-amber-500 transition"></div><div class="flex space-x-3 pt-2"><button type="button" onclick="closePopup()" class="flex-1 px-4 py-3 text-gray-700 bg-white/50 font-medium border border-gray-300/70 rounded-xl hover:bg-gray-100/50 transition-colors">Batal</button><button type="submit" class="flex-1 px-4 py-3 bg-amber-500 font-medium text-white rounded-xl hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/30">Log Masuk</button></div></form></div>`;
+            popup.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
+            document.body.appendChild(popup);
+            document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLoginSubmit);
+        }
+
+        function handleAdminLoginSubmit(event) {
+            event.preventDefault();
+            const email = event.target.email.value, password = event.target.password.value;
+            const errorP = document.getElementById('loginError'), submitBtn = event.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true; submitBtn.textContent = 'Memproses...';
             auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    closePopup();
-                    switchTab('admin');
-                    showToast('Login successful!');
-                })
-                .catch((error) => {
-                    errorP.textContent = "Invalid email or password.";
-                    errorP.classList.remove('hidden');
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Login';
-                });
+                .then(() => { closePopup(); switchTab('admin'); showToast('Log masuk berjaya!'); })
+                .catch(() => { errorP.textContent = "Email atau kata laluan tidak sah."; errorP.classList.remove('hidden'); })
+                .finally(() => { submitBtn.disabled = false; submitBtn.textContent = 'Log Masuk'; });
+        }
+
+        function handleSiteSettingsSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const settingsData = {
+                bannerImageUrl: formData.get('bannerImageUrl').trim(),
+                headerTitle: formData.get('headerTitle').trim(),
+                headerSubtitle: formData.get('headerSubtitle').trim(),
+            };
+            db.collection('settings').doc('siteConfig').set(settingsData, { merge: true })
+                .then(() => showToast('Tetapan laman berjaya disimpan!'))
+                .catch(e => { console.error("Error saving settings: ", e); showToast('Gagal menyimpan tetapan.', 'error'); });
         }
         
         // --- App Initialization ---
         function init() {
             listenForData();
-            renderSliders();
-            initSwipers();
             document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closePopup(); });
+            document.getElementById('siteSettingsForm').addEventListener('submit', handleSiteSettingsSubmit);
         }
 
         document.addEventListener('DOMContentLoaded', init);
